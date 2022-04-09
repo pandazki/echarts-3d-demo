@@ -32,6 +32,10 @@ export class SimpleGraph3D implements Graph3D<Color> {
         this.edges = edges;
     }
 
+    public getPredecessors(node: GraphNode<Position3D, Color>): GraphNode<Position3D, Color>[] {
+        return this.edges.filter(edge => edge.target.id === node.id).map(edge => edge.source);
+    }
+
     static generateFakeGraph(): SimpleGraph3D {
         const nodes: GraphNode<Position3D, Color>[] = [
             {
@@ -71,44 +75,44 @@ export class SimpleGraph3D implements Graph3D<Color> {
             }];
         const edges: GraphEdge<Position3D, Color>[] = [
             {
+                target: nodes[1],
+                source: nodes[0],
+            },
+            {
+                target: nodes[2],
+                source: nodes[0],
+            },
+            {
+                target: nodes[2],
                 source: nodes[1],
-                target: nodes[0],
             },
             {
-                source: nodes[2],
-                target: nodes[0],
-            },
-            {
-                source: nodes[2],
-                target: nodes[1],
-            },
-            {
-                source: nodes[3],
-                target: nodes[0],
-            },
-            {
-                source: nodes[4],
-                target: nodes[0],
-            },
-            {
-                source: nodes[5],
-                target: nodes[0],
-            },
-            {
-                source: nodes[4],
                 target: nodes[3],
+                source: nodes[0],
             },
             {
-                source: nodes[5],
                 target: nodes[4],
+                source: nodes[0],
             },
             {
-                source: nodes[6],
-                target: nodes[1],
+                target: nodes[5],
+                source: nodes[0],
             },
             {
-                source: nodes[6],
-                target: nodes[3],
+                target: nodes[4],
+                source: nodes[3],
+            },
+            {
+                target: nodes[5],
+                source: nodes[4],
+            },
+            {
+                target: nodes[6],
+                source: nodes[1],
+            },
+            {
+                target: nodes[6],
+                source: nodes[3],
             }];
         return new SimpleGraph3D(nodes, edges);
     }

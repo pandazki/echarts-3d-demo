@@ -37,9 +37,19 @@ const Chart = () => {
         let series: any[] = [];
         series.push({
             type: 'scatter3D',
+            name: '调度任务',
+            symbol: 'arrow',
+            symbolOffset: [0, '-50%'],
+            symbolSize: 15,
             dimensions: [
-                "x", "y", "z", "color"
+                "x", "y", "z", "color", "id", "desc"
             ],
+            label: {
+                show: true,
+                formatter: function (params: any) {
+                    return params.data[4]
+                }
+            },
             itemStyle: {
                 normal: {
                     color: function (e: any) {
@@ -47,10 +57,15 @@ const Chart = () => {
                     }
                 }
             },
+            encode: {
+                x: 0,
+                tooltip: [4, 5],
+            },
             data: graph.nodes.map(node => {
-                return [node.pos.x, node.pos.y, node.pos.z, node.data];
+                return [node.pos.x, node.pos.y, node.pos.z, node.data, node.id, `前置节点：${graph.getPredecessors(node).map(p => p.id).join(',')}`]
             })
         });
+        console.log(series[0].data);
 
         for (let i = 0; i < graph.edges.length; i++) {
             let edge = graph.edges[i];
@@ -62,7 +77,8 @@ const Chart = () => {
                     [edge.target.pos.x, edge.target.pos.y, edge.target.pos.z]
                 ],
                 lineStyle: {
-                    color: "#e36161"
+                    color: "#9f9f9f"
+
                 }
             };
             series.push(edgeSeries);
@@ -77,19 +93,48 @@ const Chart = () => {
         tooltip: {},
         backgroundColor: '#fff',
         xAxis3D: {
+            name: '',
             type: 'value',
+            axisLine: {
+                show: true,
+            },
+            axisTick: {
+                show: false,
+            },
+            axisLabel: {
+                show: false,
+            },
             axisPointer: {
+                show: false
+            },
+            splitLine: {
                 show: false
             }
         },
         yAxis3D: {
+            name: '',
             type: 'value',
+            axisLine: {
+                show: true,
+            },
+            axisTick: {
+                show: false,
+            },
+            axisLabel: {
+                show: false,
+            },
             axisPointer: {
+                show: false
+            },
+            splitLine: {
+                show: false
+            },
+            splitArea: {
                 show: false
             }
         },
         zAxis3D: {
-            name: '时间（小时）',
+            name: '↑ 时间（小时）',
             type: 'value',
             min: 0,
             max: 24,
